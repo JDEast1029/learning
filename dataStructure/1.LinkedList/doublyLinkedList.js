@@ -1,37 +1,34 @@
 class Node {
 	constructor(element) {
 		this.element = element;
+		this.prev = null;
 		this.next = null;
 	}
 }
 
-/**
- * 单向链表
- * head、tail、length
- * 插入，删除、查找、反转、遍历、
- */
-class SingleLinkedList {
+class DoublyLinkedList {
 	constructor() {
 		this.head = null;
 		this.tail = null;
-		this.length = 0;
-	}
-	
-	// 向链表末尾追加节点
-	append(...nodes) {
-		this.insert(nodes[0], null);
-		if (nodes.length > 1) {
-			this.append.apply(this, nodes.slice(1))
-		}
+		this.length = null;
 	}
 
 	contains(node) {
 		let curNode;
 		let next = this.iterator();
 		while ((curNode = next())) {
-			if (node === curNode) return true;
+			if (curNode === node) {
+				return true;
+			}
 		}
-		return false
+		return false;
+	}
+
+	append(...nodes) {
+		this.insert(nodes[0], null);
+		if (nodes.length > 1) {
+			this.append.apply(this, nodes.splice(1));
+		}
 	}
 
 	insert(node, refNode) {
@@ -42,10 +39,13 @@ class SingleLinkedList {
 			}
 			node.next = refNode.next;
 			refNode.next = node;
+			node.prev = refNode;
 		} else if (this.tail !== null) {
 			this.tail.next = node;
+			node.prev = this.tail;
 			this.tail = node;
 		} else {
+			node.prev = null;
 			this.head = node;
 			this.tail = node;
 		}
@@ -54,27 +54,33 @@ class SingleLinkedList {
 
 	remove(node) {
 		if (!this.contains(node)) return;
-		const prevNode = this.findPrev(node);
-		if (!prevNode) {
-			this.head = node.next;
-		} else {
-			prevNode.next = node.next;
-			if (this.tail === node) {
-				this.tail = prevNode;
-			}
-		}
+		if (node.prev !== null) node.prev.next = node.next;
+		if (node.next !== null) node.next.prev = node.prev;
+		if (node === this.head) this.head = node.next;
+		if (node === this.tail) this.tail = node.prev;
 		this.length -= 1;
 	}
 
-	findPrev(node) {
+	reverse() {
 		let curNode;
+		let retHead = this.head;
+		let retTail = this.tail;
 		let next = this.iterator();
-		let prev = null;
 		while ((curNode = next())) {
-			if (curNode === node) return prev;
-			prev = curNode;
+			if (curNode === retHead) {
+				curNode.prev = curNode.next;
+				curNode.next = null;
+				this.tail = curNode;
+			} else if (curNode === retTail) {
+				curNode.next = curNode.prev;
+				curNode.prev = null;
+				this.head = curNode;
+			} else {
+				let retNext = curNode.next;
+				curNode.next = curNode.prev;
+				curNode.prev = retNext
+			}
 		}
-		return null;
 	}
 
 	// 返回指定元素所在链表的索引，元素不存在则返回-1，若存在多个相同元素，则返回第一次出现的索引下标。
@@ -90,34 +96,15 @@ class SingleLinkedList {
 	}
 
 	isEmpty() {
-		return this.head && this.tail && this.length;
-	}
-
-	reverse() {
-		let curNode;
-		let prev;
-		let retHead = this.head;
-		let retTail = this.tail;
-		let next = this.iterator();
-		while ((curNode = next())) {
-			if (curNode === retHead) {
-				this.tail = curNode;
-				curNode.next = null;
-			} else {
-				if (curNode === retTail) this.head = curNode;
-				curNode.next = prev
-			}
-			prev = curNode;
-		}
+		return this.head && this.tail && this.length
 	}
 
 	clear() {
 		this.head = null;
 		this.tail = null;
-		this.length = 0
+		this.length = null;
 	}
 
-	// 供内部遍历
 	iterator(curNode = this.head) {
 		return () => {
 			let ret = curNode;
@@ -129,20 +116,19 @@ class SingleLinkedList {
 		}
 	}
 
-	// 供外部遍历时调用，能方便拿到node的element值
 	[Symbol.iterator]() {
 		let curNode = this.head;
 		return {
-			next() {
+			next: () => {
 				if (curNode) {
 					const value = curNode.element;
 					curNode = curNode.next;
 					return { done: false, value: value };
 				}
-				return { done: true, value: undefined }
+				return { done: true, value: undefined };
 			}
 		}
 	}
 }
 
-export { SingleLinkedList as default, Node }
+export { DoublyLinkedList as default, Node }
