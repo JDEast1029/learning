@@ -24,16 +24,8 @@ class LRUDoublyLinkedList extends DoublyLinkedList {
 	 * @returns 最后的节点
 	 */
 	removeLast() {
-		if (this.tail === null) return null;
-
 		const retTail = this.tail;
-		const prevNode = this.tail.prev;
-		if (prevNode === null) return null;
-		prevNode.next = null;
-		this.tail = prevNode;
-		retTail.prev = null;
-
-		this.length -= 1;
+		this.remove(retTail)
 
 		return retTail;
 	}
