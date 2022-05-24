@@ -1,87 +1,130 @@
 class IState {
-	doHandle() {
-		throw new Error('请继承IState，并重写改方法')
-	}
-
-	changeState(context) {
-		throw new Error('请继承IState，并重写改方法')
+	changeState() {
+		throw new Error('请继承IState，并重写改方法');
 	}
 }
 
-
-// 静止下的进度条
 class IdleState extends IState {
 	constructor() {
 		super();
-		this.height = 1;
+		this.bottomStyle = `
+			background-color: rgba(255, 255, 255, .2);
+			height: 6rpx;
+			border-radius: 3rpx;
+		`;
+		this.barStyle = '';
+		this.dotStyle = `
+			width: 10rpx;
+			height: 10rpx;
+			border-radius: 5rpx;
+			background-color: rgba(255, 255, 255, .4);
+		`;
 	}
 
-	doHandle() {}
-
 	changeState(context) {
+		console.log('IdleState：无操作');
 	}
 }
 
-// 点击/触摸 下的状态
+class LoadingState extends IState {
+	constructor() {
+		super();
+		this.bottomStyle = `
+			background-color: rgba(255, 255, 255, .2);
+			height: 6rpx;
+			border-radius: 3rpx;
+		`;
+		this.barStyle = '';
+		this.dotStyle = '';
+	}
+
+	changeState(context) {
+		context.setState(new IdleState());
+	}
+}
+
 class TouchState extends IState {
 	constructor() {
 		super();
-		this.height = 10;
-	}
-
-	doHandle() {
+		this.bottomStyle = `
+			background-color: rgba(255, 255, 255, .2);
+			height: 8rpx;
+			border-radius: 4rpx;
+		`;
+		this.barStyle = `
+			background-color: #fff;
+		`;
+		this.dotStyle = `
+			width: 12rpx;
+			height: 12rpx;
+			border-radius: 6rpx;
+			background-color: #fff;
+		`;
 	}
 
 	changeState(context) {
-		context.setState(new IdleState())
+		context.setState(new IdleState());
 	}
 }
 
-// 拖拽时的进度条
-class DragState extends IState {
+class MoveState extends IState {
 	constructor() {
 		super();
-		this.height = 30;
-	}
-
-	doHandle() {
+		this.bottomStyle = `
+			background-color: rgba(255, 255, 255, .2);
+			height: 20rpx;
+			border-radius: 6rpx;
+		`;
+		this.barStyle = `
+			background-color: #fff;
+		`;
+		this.dotStyle = `
+			width: 12rpx;
+			height: 26rpx;
+			border-radius: 6rpx;
+			background-color: #fff;
+		`;
 	}
 
 	changeState(context) {
-		context.setState(new TouchState())
+		context.setState(new TouchState());
 	}
 }
 
+// 小程序下开发自定义进度条，模仿抖音效果
 class ProcessBarState {
-	constructor() {
-		this.state = new IdleState();
+	constructor(context, delay) {
+		this.context = context;
+		this.delay = delay || 3000;
+		this.state = new LoadingState();
 	}
 
 	setState(state) {
 		this.state = state;
-		console.log(`process bar样式高度改为${this.state.height}px`);
+		this.timer && clearTimeout(this.timer);
+		this.context && this.context.setData({
+			bottomStyle: state.bottomStyle,
+			barStyle: state.barStyle,
+			dotStyle: state.dotStyle,
+		});
 	}
 
-	doHandle() {
-		this.state.doHandle();
+	changeState() {
 		this.state.changeState(this);
+	}
+
+	delayChangeState() {
+		this.timer = setTimeout(() => {
+			this.state.changeState(this);
+		}, this.delay);
 	}
 }
 
-const processBarState = new ProcessBarState();
 
-// 点击屏幕
-processBarState.setState(new TouchState());
-setTimeout(() => {
-	processBarState.doHandle();
-}, 2000);
-
-
-// 拖拽进度条
-processBarState.setState(new DragState());
-setTimeout(() => {
-	processBarState.doHandle();
-	setTimeout(() => {
-		processBarState.doHandle();
-	}, 2000);
-}, 2000);
+export {
+	ProcessBarState as default,
+	IdleState,
+	LoadingState,
+	TouchState,
+	MoveState
+};
