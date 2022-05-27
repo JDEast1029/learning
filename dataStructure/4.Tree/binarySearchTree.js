@@ -137,9 +137,17 @@ class BinarySearchTree {
 		yield node;
 	}
 
-	/* -----------Morris法遍历------------ */
+	// 层序遍历
+	*levelOrderTraversal(node = this.root) {
+		let visit = [node];
+		while (visit.length) {
+			node = visit.shift();
+			yield node;
+			if (node.left) visit.push(node.left);
+			if (node.right) visit.push(node.right);
+		}
+	}
 }
-
 
 
 // test
@@ -155,7 +163,7 @@ var deleteNode = function(root = [], key) {
 	tree.remove(key);
 
 	let result = [];
-	for (const i of tree.preOrderTraversal()) {
+	for (const i of tree.levelOrderTraversal()) {
 		result.push(i ? i.key : i);
 	}
 	return result;
