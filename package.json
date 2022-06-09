@@ -1,0 +1,27 @@
+{
+  "name": "learning",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test-factory": "ts-node ./designMode/1.Creational/1.Factory/index.ts",
+    "test-as-factory": "ts-node ./designMode/1.Creational/2.AbstractFactory/index.ts",
+    "test-builder": "ts-node ./designMode/1.Creational/3.Builder/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JDEast1029/learning.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JDEast1029/learning/issues"
+  },
+  "homepage": "https://github.com/JDEast1029/learning#readme",
+  "devDependencies": {
+    "@types/node": "^17.0.41",
+    "ts-node": "^10.8.1",
+    "tslib": "^2.4.0",
+    "typescript": "^4.7.3"
+  }
+}

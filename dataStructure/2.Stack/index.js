@@ -5,7 +5,7 @@ class Node {
 	}
 }
 
-// 基于当链表的栈
+// 基于单链表的栈
 class StackOnSingleLinkedList {
 	constructor() {
 		this.top = null;
