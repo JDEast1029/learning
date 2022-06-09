@@ -1,41 +1,58 @@
 # 树(Tree)
 
 ### 二叉查找树(Binary Search Tree)
+
 它是特殊的二叉树：对于每个结点,左子节点的值都比它小,右子节点值都比它大.
 
-
 ### 遍历方式
+
 #### 前序遍历
+
 > 可以很方便地形成一条搜索路径。需要优先知道根节点信息，可以采用这种遍历方式
 
 1. 先访问根节点
 2. 在访问左节点
 3. 最后访问右节点
-   
+
 #### 中序遍历
+
 > 遍历BST的时候可以得到一个**有序序列**。
 
 1. 先访问左节点
 2. 再访问根节点
 3. 最后访问右节点
-   
+
 #### 后序遍历
+
 > 适合进行破坏性操作（删除节点）。需要优先知道子节点的信息，可以采用这种遍历方式
 
 1. 先访问左节点
 2. 再访问右节点
 3. 最后访问根节点
-   
+
 #### 层序遍历
+
 ....
 
 ### 遍历实现方式
+
 #### 迭代
+
 #### Morris
+
 ##### [遍历实现原则](https://zhuanlan.zhihu.com/p/101321696)
+
 记作当前节点为cur。
+
 1. 如果cur无左孩子，cur向右移动（cur=cur.right）
 2. 如果cur有左孩子，找到cur左子树上最右的节点，记为mostRight
-	1. 如果mostRight的right指针指向空，让其指向cur，cur向左移动（cur=cur.left）
-	2. 如果mostRight的right指针指向cur，让其指向空，cur向右移动（cur=cur.right）
+   1. 如果mostRight的right指针指向空，让其指向cur，cur向左移动（cur=cur.left）
+   2. 如果mostRight的right指针指向cur，让其指向空，cur向右移动（cur=cur.right）
 
+
+
+
+
+#### 后序遍历思路
+
+![](./images/post-morris.jpg)
