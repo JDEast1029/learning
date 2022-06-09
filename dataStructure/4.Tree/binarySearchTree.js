@@ -67,7 +67,7 @@ class BinarySearchTree {
 
 		/* 移除原则：左子节点替换父节点，右侧子树挂载到左节点的最右侧节点下 */
 		const findMostRight = (node) => {
-			let curNode = node;
+			let curNode = node.left;
 			while (true) {
 				if (curNode.right) {
 					curNode = curNode.right;
@@ -93,7 +93,7 @@ class BinarySearchTree {
 			}
 		}
 		if (node.right && node.left) {
-			const mostRightNode = findMostRight(node.left);
+			const mostRightNode = findMostRight(node);
 			mostRightNode.right = node.right;
 			node.right.parent = mostRightNode;
 		}
@@ -163,10 +163,10 @@ var deleteNode = function(root = [], key) {
 	tree.remove(key);
 
 	let result = [];
-	for (const i of tree.levelOrderTraversal()) {
+	for (const i of tree.inOrderTraversal()) {
 		result.push(i ? i.key : i);
 	}
 	return result;
 };
 
-deleteNode([5,3,6,2,4,null,7], 3)
+console.log(deleteNode([5,3,6,4,null,7], 3));

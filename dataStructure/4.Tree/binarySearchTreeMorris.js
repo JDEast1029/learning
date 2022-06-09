@@ -65,18 +65,6 @@ class BinarySearchTree {
 			return;
 		}
 
-		/* 移除原则：左子节点替换父节点，右侧子树挂载到左节点的最右侧节点下 */
-		const findMostRight = (node) => {
-			let curNode = node;
-			while (true) {
-				if (curNode.right) {
-					curNode = curNode.right;
-				} else {
-					return curNode;
-				}
-			}
-		}
-
 		if (isRoot) {
 			if (!node.left) {
 				this.root = node.right;
@@ -92,20 +80,32 @@ class BinarySearchTree {
 				node.parent.left = node.left;
 			}
 		}
+		/* 移除原则：左子节点替换父节点，右侧子树挂载到左节点的最右侧节点下 */
 		if (node.right && node.left) {
-			const mostRightNode = findMostRight(node.left);
+			const mostRightNode = this.findMostRight(node);
 			mostRightNode.right = node.right;
 			node.right.parent = mostRightNode;
 		}
 	}
 
 	has(key) {
-		
+		for (const node of this.preOrderTraversal()) {
+			if (node.key === key) return true;
+		}
+		return false;
 	}
 
 	// find里用了后序遍历，因为在remove的时候需要调用find方法，这样能确保优先拿到子节点，方便后序的删除操作
 	find(key) {
-		
+		let result;
+
+		// 必须要完成所有遍历，中途中断回导致mostRight节点没有消除 || 或者找到节点后手动消除mostRight节点上加的东西
+		for (const node of this.postOrderTraversal()) {
+			if (node.key === key) {
+				result = node;
+			}
+		}
+		return result;
 	}
 
 	findMostRight(node) {
@@ -257,10 +257,10 @@ const deleteNode = (root = [], key) => {
 	root.forEach(it => {
 		tree.insert(it);
 	});
-	// tree.remove(key);
+	tree.remove(key);
 
 	let result = [];
-	for (const i of tree.postOrderTraversal()) {
+	for (const i of tree.inOrderTraversal()) {
 		result.push(i ? i.key : i);
 	}
 	return result;
