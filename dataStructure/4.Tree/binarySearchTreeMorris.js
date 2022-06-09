@@ -234,8 +234,14 @@ class BinarySearchTree {
 	}
 
 	// 层序遍历
-	levelOrderTraversal(node = this.root) {
-
+	*levelOrderTraversal(node = this.root) {
+		let visit = [node];
+		while (visit.length) {
+			node = visit.shift();
+			yield node;
+			if (node.left) visit.push(node.left);
+			if (node.right) visit.push(node.right);
+		}
 	}
 }
 
