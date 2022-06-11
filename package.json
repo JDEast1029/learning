@@ -6,7 +6,8 @@
   "scripts": {
     "test-factory": "ts-node ./designMode/1.Creational/1.Factory/index.ts",
     "test-as-factory": "ts-node ./designMode/1.Creational/2.AbstractFactory/index.ts",
-    "test-builder": "ts-node ./designMode/1.Creational/3.Builder/index.ts"
+    "test-builder": "ts-node ./designMode/1.Creational/3.Builder/index.ts",
+    "test-singleton": "ts-node ./designMode/1.Creational/5.Singleton/index.ts"
   },
   "repository": {
     "type": "git",
