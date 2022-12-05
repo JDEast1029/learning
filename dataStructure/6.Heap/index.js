@@ -7,18 +7,18 @@ class MaxHeap {
 	get length() {
 		return this.heap.length;
 	}
-	
+
 	getParentIndex(index) {
 		return Math.floor((index - 1) / 2);
 	}
 
 	getLeftChildIndex(index) {
-		let left = index * 2 + 1
+		let left = index * 2 + 1;
 		return left > this.length - 1 ? -1 : left;
 	}
 
 	getRightChildIndex(index) {
-		let right = index * 2 + 1;
+		let right = index * 2 + 2;
 		return right > this.length - 1 ? -1 : right;
 	}
 
@@ -31,25 +31,32 @@ class MaxHeap {
 			let parentIndex = this.getParentIndex(index);
 			if (this.heap[parentIndex] >= this.heap[index]) return;
 			this.swap(parentIndex, index);
-			index = parentIndex
+			index = parentIndex;
 		}
 	}
 
-
 	shiftdown(index) {
-		while (index) {
+		while (index >= 0) {
 			const leftIndex = this.getLeftChildIndex(index);
 			const rightIndex = this.getRightChildIndex(index);
-			
+
 			if (leftIndex === -1 && rightIndex === -1) return;
-			if (leftIndex !== -1 && this.heap[leftIndex] > this.heap[index]) {
+			// 找到左右节点值最大的进行替换，这样能保证最大堆
+			if (
+				leftIndex !== -1 &&
+				this.heap[leftIndex] > this.heap[rightIndex] &&
+				this.heap[leftIndex] > this.heap[index]
+			) {
 				this.swap(leftIndex, index);
 				index = leftIndex;
-			} else if (rightIndex !== -1 && this.heap[rightIndex] > this.heap[index]) {
+			} else if (
+				rightIndex !== -1 &&
+				this.heap[leftIndex] < this.heap[rightIndex] &&
+				this.heap[rightIndex] > this.heap[index]
+			) {
 				this.swap(rightIndex, index);
 				index = rightIndex;
-			}
-			return;
+			} else return;
 		}
 	}
 
@@ -59,7 +66,7 @@ class MaxHeap {
 	}
 
 	remove(value) {
-		const index = this.heap.findIndex(it => it === value);
+		const index = this.heap.findIndex((it) => it === value);
 		if (index === -1) return -1;
 		this.swap(index, this.length - 1); // 尾部元素跟要删除的元素互换， 这样能保证是完全二叉树
 		this.heap.pop(); // 删除尾部元素
