@@ -40,8 +40,13 @@ class SingleLinkedList {
 				console.error('目标节点不在当前链表内');
 				return;
 			}
+			const isInsertAfterTail = (refNode === this.tail);
 			node.next = refNode.next;
 			refNode.next = node;
+			// 如果在尾节点后插入，需要更新tail指针
+			if (isInsertAfterTail) {
+				this.tail = node;
+			}
 		} else if (this.tail !== null) {
 			this.tail.next = node;
 			this.tail = node;
