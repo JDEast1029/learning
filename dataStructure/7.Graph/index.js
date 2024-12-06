@@ -15,7 +15,7 @@ class Edge {
 
 class Graph {
 	constructor(directed = true) {
-		this.directed = directed;
+		this.directed = directed; // 是否有向
 		this.vertices = new Set(); // 顶点集合
 
 		this.adjacentList = new Map(); // 邻接表
